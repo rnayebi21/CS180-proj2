@@ -1,0 +1,719 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>CS 180 - Project 2 - Fun with Filters and Frequencies!</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-default_background {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 237, 214, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-transparentGray { background-color: rgba(227, 226, 224, 0); }
+.select-value-color-translucentGray { background-color: rgba(0, 0, 0, 0.06); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(249, 228, 188, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="807f6361-93c5-4690-8ac2-b9941de1ea5a" class="page serif"><header><img class="page-cover-image" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/wp-2018-11-Photo-Effects-18.avif" style="object-position:center 13.470000000000004%"/><h1 class="page-title">CS 180 - Project 2 - <strong>Fun with Filters and Frequencies!</strong></h1><p class="page-description"></p></header><div class="page-body"><h1 id="e0da5964-3b06-4e3c-8fba-5ebcb7af4d01" class="">Part 1: Fu<strong>n with Filters</strong></h1><h2 id="2da5bbe7-af83-43e0-ac42-d38f0acf0d07" class="">Part 1.1<strong>: Finite Difference Operator</strong></h2><div id="716c502d-9514-4d72-9c81-57b0e3b512f5" class="column-list"><div id="10a9ad28-a8e1-80ea-897c-fc30bbf5e322" style="width:75%" class="column"><p id="e16e8fd4-2550-4e0f-b2d9-94ba77fa91e3" class="">First I defined the partial derivatives as described in the project specifications as <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>x</mi></msub><mo>=</mo><mo stretchy="false">[</mo><mn>1</mn><mtext>   </mtext><mo>−</mo><mn>1</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">D_x = [1 \ \ \ -1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mspace"> </span><span class="mspace"> </span><span class="mspace"> </span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span></span><span>﻿</span></span> and <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>y</mi></msub><mo>=</mo><mrow><mo fence="true">[</mo><mtable rowspacing="0.16em" columnalign="center" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mn>1</mn></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mo>−</mo><mn>1</mn></mrow></mstyle></mtd></mtr></mtable><mo fence="true">]</mo></mrow></mrow><annotation encoding="application/x-tex">D_y = \left[\begin{matrix}1\\-1\end{matrix}\right]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.4em;vertical-align:-0.95em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size3">[</span></span><span class="mord"><span class="mtable"><span class="col-align-c"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.45em;"><span style="top:-3.61em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span><span style="top:-2.41em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">−</span><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.95em;"><span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size3">]</span></span></span></span></span></span></span><span>﻿</span></span>. Then I applied this to the one channel (as it was a black and white image) via a convolution operation, specifically the one suggested in the specs <code>convolve2d</code> from <code>scipy.signal</code>. After this I computed the gradient magnitude as <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><msubsup><mi>D</mi><mi>x</mi><mn>2</mn></msubsup><mo>+</mo><msubsup><mi>D</mi><mi>y</mi><mn>2</mn></msubsup></mrow></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{D_x^2 + D_y^2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.84em;vertical-align:-0.6765em;"></span><span class="mord sqrt"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.1635em;"><span class="svg-align" style="top:-3.8em;"><span class="pstrut" style="height:3.8em;"></span><span class="mord" style="padding-left:1em;"><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.453em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.247em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.7401em;"><span style="top:-2.453em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span><span style="top:-2.989em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.3831em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.1235em;"><span class="pstrut" style="height:3.8em;"></span><span class="hide-tail" style="min-width:1.02em;height:1.88em;"><svg xmlns="http://www.w3.org/2000/svg" width='400em' height='1.88em' viewBox='0 0 400000 1944' preserveAspectRatio='xMinYMin slice'><path d='M983 90
+l0 -0
+c4,-6.7,10,-10,18,-10 H400000v40
+H1013.1s-83.4,268,-264.1,840c-180.7,572,-277,876.3,-289,913c-4.7,4.7,-12.7,7,-24,7
+s-12,0,-12,0c-1.3,-3.3,-3.7,-11.7,-7,-25c-35.3,-125.3,-106.7,-373.3,-214,-744
+c-10,12,-21,25,-33,39s-32,39,-32,39c-6,-5.3,-15,-14,-27,-26s25,-30,25,-30
+c26.7,-32.7,52,-63,76,-91s52,-60,52,-60s208,722,208,722
+c56,-175.3,126.3,-397.3,211,-666c84.7,-268.7,153.8,-488.2,207.5,-658.5
+c53.7,-170.3,84.5,-266.8,92.5,-289.5z
+M1001 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.6765em;"><span></span></span></span></span></span></span></span></span></span><span>﻿</span></span>, which allows us to see the edges more clearly.</p></div><div id="10a9ad28-a8e1-8037-862c-dace9bc47d4b" style="width:25.000000000000007%" class="column"><figure id="10a9ad28-a8e1-80f5-b77a-fd4a0cf9a421" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/cameraman.png"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/cameraman.png"/></a><figcaption>Original Image</figcaption></figure></div></div><div id="10a9ad28-a8e1-8084-9436-c0665f35fbc8" class="column-list"><div id="10a9ad28-a8e1-8005-9076-ed5aefe21111" style="width:33.33333333333333%" class="column"><figure id="96f309b8-0cb7-4da6-a8c8-8dd5a7eee095" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/partial_x.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/partial_x.jpg"/></a></figure><p id="10a9ad28-a8e1-80d5-b5b2-c11b74ae6d3b" class="">                           <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>x</mi></msub></mrow><annotation encoding="application/x-tex">D_x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">x</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p></div><div id="10a9ad28-a8e1-801d-9cb0-c75068f12490" style="width:33.33333333333334%" class="column"><figure id="7567034e-6677-4183-90be-787668db7eef" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/partial_y.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/partial_y.jpg"/></a></figure><p id="10a9ad28-a8e1-80ab-8868-f776728f56c8" class="">                           <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>y</mi></msub></mrow><annotation encoding="application/x-tex">D_y</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.9694em;vertical-align:-0.2861em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.1514em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">y</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span></span></span><span>﻿</span></span></p></div><div id="10a9ad28-a8e1-8070-9ac9-ec5424bd4bea" style="width:33.33333333333333%" class="column"><figure id="10a9ad28-a8e1-80c4-ab07-fb9d7cae36fd" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gradient.jpg"><img style="width:380px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gradient.jpg"/></a></figure><p id="10a9ad28-a8e1-8025-883a-fd9a2ea027b8" class="">          gradient magnitude</p></div></div><p id="10a9ad28-a8e1-80a1-b04a-e2b14b156938" class="">
+</p><div id="10a9ad28-a8e1-8081-8757-cce4af34498d" class="column-list"><div id="10a9ad28-a8e1-80de-9d67-dd751ad32481" style="width:62.5%" class="column"><p id="10a9ad28-a8e1-808d-9c56-e0a9a829aeec" class="">Now it was time to binarize the image after taking the gradient magnitude to get it to have a cleaner look. To do this I created a function that given a photo and a percentage it returns the corresponding pixel value threshold such that if applied to the image only that percent of pixel remain. I found that using a percentage of 3 seemed to the best results, as it gets rid of a lot of the noise while still maintaining the outline camera man. These are the results of using percents 1, 3, 5, and 10.</p><p id="10a9ad28-a8e1-807b-bdb1-d685069507f3" class="">
+</p></div><div id="10a9ad28-a8e1-8047-a011-d50f3b56e8de" style="width:37.50000000000001%" class="column"><figure id="10a9ad28-a8e1-80a3-83a1-dd994992aa37" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_3.jpg"><img style="width:336px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_3.jpg"/></a></figure><p id="10a9ad28-a8e1-8075-8194-f992d43afd5b" class="">Final image chosen from the thresholds (3%)</p></div></div><p id="5db2b5f6-9f29-480c-bd6b-317090630b23" class=""> </p><div id="10a9ad28-a8e1-800c-986a-f9cfa4bc8006" class="column-list"><div id="10a9ad28-a8e1-80f0-b685-ed463fdfa978" style="width:25%" class="column"><figure id="10a9ad28-a8e1-808f-8c18-e172b09438a1" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_1.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_1.jpg"/></a></figure><p id="10a9ad28-a8e1-80b8-8541-e3df5d67daf7" class="">      1% threshold</p></div><div id="10a9ad28-a8e1-80d5-a348-d607adbe29a9" style="width:25%" class="column"><figure id="0a003acf-3c4e-4529-ad15-94a24c923d3b" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_3%201.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_3%201.jpg"/></a></figure><p id="10a9ad28-a8e1-80a7-b2ab-ede9ba887b7a" class="">        <mark class="highlight-yellow_background">3% threshold</mark></p><p id="10a9ad28-a8e1-8059-b86c-c66239d0f553" class="">       <mark class="highlight-yellow_background">(chosen image)</mark></p></div><div id="10a9ad28-a8e1-802e-b2c0-d54fd610753e" style="width:25%" class="column"><figure id="10a9ad28-a8e1-80ed-b2c3-f7e96b4edeb4" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_5.jpg"><img style="width:380px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_5.jpg"/></a></figure><p id="10a9ad28-a8e1-80bf-a755-f90843cebfe5" class="">      5% threshold</p></div><div id="10a9ad28-a8e1-8057-95cc-e50a9cd95b42" style="width:25%" class="column"><figure id="10a9ad28-a8e1-8098-9493-ec05bb7b9d5f" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_10.jpg"><img style="width:380px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/binarized_10.jpg"/></a></figure><p id="dd0a6d25-3898-45ec-a191-6d0bf3e04d13" class="">     10% threshold</p><p id="10a9ad28-a8e1-8066-b407-e3b421886b50" class="">
+</p></div></div><p id="10a9ad28-a8e1-8085-9e36-c0b7c3f793b4" class="">
+</p><h2 id="0761914a-668a-4eb1-a63c-c0b579367dc3" class=""><strong>Part 1.2: Derivative of Gaussian (DoG) Filter</strong></h2><p id="10a9ad28-a8e1-8060-856e-c2ccb8927500" class="">Our previous result is a little pixelated, so to help get a smoother and cleaner look, we will first apply a Gaussian smoother over the image. For choosing the kernel size, I used the rule of thumb that was presented in class which stated:“Rule of thumb for Gaussian: set filter half-width to about 3 σ”. Thus I set ksize = <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>⋅</mo><mo stretchy="false">(</mo><mn>3</mn><mo>⋅</mo><mi>σ</mi><mo stretchy="false">)</mo><mo>+</mo><mn>1</mn><mo>=</mo><mn>6</mn><mi>σ</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex"> 2 \cdot (3 \cdot \sigma) + 1 = 6\sigma + 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">6</span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span><span>﻿</span></span>, where the +1 ensures that my kernel size is odd Throughout the rest of this project I set my kernel size according to this rule. These are the results I got</p><div id="10a9ad28-a8e1-80e1-a121-c055437ad3cc" class="column-list"><div id="10a9ad28-a8e1-8059-ad97-d2b421095a38" style="width:25%" class="column"><figure id="10a9ad28-a8e1-80f1-98d8-e4fe0e33cb71" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blurred_partial_x.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blurred_partial_x.jpg"/></a></figure><p id="10a9ad28-a8e1-808d-91b2-d8c709fb7e0f" class="">partial x (with blurring)</p></div><div id="64e29dc7-d6e9-4c03-b9f1-d1ed8acc0bfe" style="width:25%" class="column"><figure id="10a9ad28-a8e1-8051-8767-ff3f617362c1" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blurred_partial_y.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blurred_partial_y.jpg"/></a></figure><p id="10a9ad28-a8e1-80ab-857d-ebda3a5cba6e" class="">partial y (with blurring)</p></div><div id="10a9ad28-a8e1-80e4-ac77-df0cb178cac6" style="width:25%" class="column"><figure id="10a9ad28-a8e1-80e0-872a-f98de77808ad" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blurred_gradient_mag.jpg"><img style="width:540px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blurred_gradient_mag.jpg"/></a></figure><p id="ea034de4-2aa8-4a23-a2fb-03ab8046b6e9" class="">gradient magnitude (with blurring)</p></div><div id="10a9ad28-a8e1-803c-98b9-f3e398e05126" style="width:25%" class="column"><figure id="10a9ad28-a8e1-80e4-834a-fb1cdb58e306" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blurred_edges_5.jpg"><img style="width:540px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blurred_edges_5.jpg"/></a></figure><p id="10a9ad28-a8e1-8024-944f-f03768290a53" class="">edges, 5% threshold (with blurring)</p></div></div><p id="10a9ad28-a8e1-8025-a2c0-e469e26c6e6a" class="">The <strong>main differences</strong> I see are the reduction in pixelation in all steps of the process specified in section 1.1. The whole look appears a lot smoother.</p><p id="e12da4c7-6e52-4f5a-952f-575c9ab356b9" class="">We can achieve these same results with one fewer convolution by only convolving the original image on the derivatives of the Guassians (<em>DoG</em>), as opposed to convolving with the Gaussian and then with the derivative. </p><div id="10a9ad28-a8e1-8033-af68-c3303d857a45" class="column-list"><div id="10a9ad28-a8e1-8010-aba6-c4f04ff367c5" style="width:25%" class="column"><figure id="10a9ad28-a8e1-80d4-9f2e-f0615edc1ae9" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DoG_blurred_partial_x.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DoG_blurred_partial_x.jpg"/></a></figure><p id="10a9ad28-a8e1-80bd-8c3b-cdfcef7c6355" class="">DoG wrt <em>x</em></p></div><div id="63e47afa-2611-4e88-81cd-96de2e75e83f" style="width:25%" class="column"><figure id="10a9ad28-a8e1-80da-8037-c89b794493af" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DoG_blurred_partial_y.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DoG_blurred_partial_y.jpg"/></a></figure><p id="10a9ad28-a8e1-8065-bafe-d794199dfceb" class="">DoG wrt <em>y</em></p><p id="10a9ad28-a8e1-80e3-ae2b-fcb5cb04b768" class="">
+</p></div><div id="10a9ad28-a8e1-8056-a953-fef8a6663067" style="width:25%" class="column"><figure id="73a9cd07-0818-45d4-920e-a84e9caf9f57" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DoG_blurred_gradient_mag.jpg"><img style="width:540px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DoG_blurred_gradient_mag.jpg"/></a></figure><p id="10a9ad28-a8e1-8009-8c1a-fc5a63000e01" class="">DoG gradient magnitude</p></div><div id="10a9ad28-a8e1-8074-8d63-df7cafbb684e" style="width:25%" class="column"><figure id="10a9ad28-a8e1-809a-9493-efe9e929651b" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DoG_blurred_edges_5.jpg"><img style="width:540px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DoG_blurred_edges_5.jpg"/></a></figure><p id="10a9ad28-a8e1-8081-b1dc-de074b2389e8" class="">DoG edges, 5% threshold</p></div></div><p id="10b9ad28-a8e1-809a-a273-ca32b03ce7d9" class="">Thus we have confirmed that we get the same results regardless if we do these steps in two separate convolutions or in one combined convolution.</p><h1 id="f46d8b8b-22f8-4b92-a02d-a97707720855" class=""><strong>Part 2: Fun with Frequencies!</strong></h1><h2 id="8f3a7106-b78a-498b-b17f-5d305f698dcd" class=""><strong>Part 2.1: Image &quot;Sharpening&quot;</strong></h2><div id="10a9ad28-a8e1-804c-8c59-e1019b2d3fe9" class="column-list"><div id="10a9ad28-a8e1-805f-b9c4-d365254aeced" style="width:25%" class="column"><figure id="10a9ad28-a8e1-804a-832a-c5e04118106a" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/taj.jpg"><img style="width:165.5px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/taj.jpg"/></a></figure><p id="10a9ad28-a8e1-80fa-b559-fbe75ffaadec" class="">original</p></div><div id="9ffac742-aac5-4974-8cbd-af34a16002b4" style="width:75%" class="column"><p id="06b0b176-dc5c-4340-bed2-558c5ceb702b" class="">Here we are doing image sharpening, where we get the high frequencies from the original image and enhance them by adding them onto the original image. You can control how much of the higher frequencies you want to add by increasing or decreasing the coefficient (<style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>). The original image is shown on the left. Below is the results on different levels of <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi></mrow><annotation encoding="application/x-tex">\alpha</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span></span></span></span></span><span>﻿</span></span>. </p><p id="10a9ad28-a8e1-80ed-9291-d215e7760f9e" class="">
+</p></div></div><div id="10a9ad28-a8e1-803b-b3e1-ffb4c0bd948a" class="column-list"><div id="10a9ad28-a8e1-809f-864d-e458e37eb0fc" style="width:33.33333333333334%" class="column"><figure id="10a9ad28-a8e1-80cd-a18d-fc812659e991" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_0.5.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_0.5.jpg"/></a></figure><p id="10a9ad28-a8e1-80d1-8413-f6a1f45f7491" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.25</mn></mrow><annotation encoding="application/x-tex">\alpha = 0.25</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.25</span></span></span></span></span><span>﻿</span></span></p></div><div id="10a9ad28-a8e1-8067-956e-ec3be79f87e1" style="width:33.33333333333334%" class="column"><figure id="4f0256d4-9047-4761-9d5f-453cb5e166d1" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_0.25.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_0.25.jpg"/></a></figure><p id="10a9ad28-a8e1-802e-98bf-e3e963fc3e40" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\alpha = 0.5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">0.5</span></span></span></span></span><span>﻿</span></span></p></div><div id="10a9ad28-a8e1-80d3-8d41-ff618732d3e0" style="width:33.33333333333334%" class="column"><figure id="10a9ad28-a8e1-8023-94bc-cd62cf27201f" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_1.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_1.jpg"/></a></figure><p id="10a9ad28-a8e1-8041-846c-daac72396ff3" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\alpha = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">1</span></span></span></span></span><span>﻿</span></span></p></div></div><div id="10a9ad28-a8e1-80e4-8612-c4d1dd757e0a" class="column-list"><div id="10a9ad28-a8e1-8018-87e2-f9a90675d75d" style="width:33.333333333333336%" class="column"><figure id="10a9ad28-a8e1-8000-9b5f-f02202a87bd2" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_2.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_2.jpg"/></a></figure><p id="10a9ad28-a8e1-8003-a6af-d8cd4c308ed7" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\alpha = 2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">2</span></span></span></span></span><span>﻿</span></span></p></div><div id="10a9ad28-a8e1-8049-877e-e51910abdfb2" style="width:33.333333333333336%" class="column"><figure id="9df4d254-77f6-4fdf-a6a0-35ef98758e9f" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_5.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_5.jpg"/></a></figure><p id="10a9ad28-a8e1-80a3-8930-ebf6f3cefeda" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">\alpha = 5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">5</span></span></span></span></span><span>﻿</span></span></p></div><div id="ef542c7d-317b-4db7-bde3-2b38168598f1" style="width:33.33333333333333%" class="column"><figure id="dbf03288-e958-4a22-99ac-6f3a94d8291b" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_10.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/sharp_taj_10.jpg"/></a></figure><p id="10a9ad28-a8e1-8000-ba21-f5273a0b8bf4" class=""><style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>α</mi><mo>=</mo><mn>10</mn></mrow><annotation encoding="application/x-tex">\alpha = 10</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.0037em;">α</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">10</span></span></span></span></span><span>﻿</span></span></p></div></div><p id="10a9ad28-a8e1-80b4-b18c-edeb6de7848f" class="">
+</p><p id="10a9ad28-a8e1-803a-8ea1-c8ad65bc07f3" class="">More examples (expanding them to be larger to see the differences better)</p><p id="f28ddf29-ddc1-40d2-b56c-966523330c84" class=""><em>Berkeley</em></p><figure id="10a9ad28-a8e1-80d7-ae3d-dc53acd052db" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/berkeley.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/berkeley.jpg"/></a><figcaption>Berkeley Original</figcaption></figure><figure id="10a9ad28-a8e1-80cf-89f8-fa5db2862673" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/berkeley_blurry.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/berkeley_blurry.jpg"/></a><figcaption>Berkeley Blurred</figcaption></figure><figure id="10a9ad28-a8e1-8052-a1cd-ebb32bee0992" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/berkeley_resharp.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/berkeley_resharp.jpg"/></a><figcaption>Berkeley Resharpened</figcaption></figure><p id="10a9ad28-a8e1-804f-a025-fc80c9f469a3" class="">
+</p><p id="10a9ad28-a8e1-80b0-93f3-f8dc214ac580" class=""><em>Qazvin</em></p><figure id="10a9ad28-a8e1-8038-a949-d373f9c84068" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/qazvin.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/qazvin.jpg"/></a></figure><figure id="10a9ad28-a8e1-80d8-b20b-ca209635dc06" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/qazvin_blurry.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/qazvin_blurry.jpg"/></a></figure><p id="51af8e46-f87d-4a83-b626-80aa573912f7" class="">
+</p><figure id="10a9ad28-a8e1-8042-8fed-da85583db5ca" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/qazvin_resharp.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/qazvin_resharp.jpg"/></a></figure><p id="10a9ad28-a8e1-80db-a045-e1ebe5572420" class="">
+</p><h2 id="1d7c8c00-cf41-4f0c-b775-90f91e3dcc8f" class=""><strong>Part 2.2: Hybrid Images</strong></h2><p id="10b9ad28-a8e1-806a-b00b-c3c9d2d4791e" class="">When we are looking at things up close, such as reading, we tend to focus on the higher frequencies. On the other hand, when we are squinting, looking far away, or in our peripheral we tend to pick up more on the lower frequencies. Thus we can take the lower frequencies of one image and the higher frequencies of another image and combine them to get a hybrid image. Here are some examples, note that I implemented some bells and whistles by using both color and grayscale.</p><div id="10b9ad28-a8e1-80e4-8574-f6e23f52831d" class="column-list"><div id="10b9ad28-a8e1-8010-bbdb-c8e5f9ff7c50" style="width:25%" class="column"><figure id="10b9ad28-a8e1-808c-b7e3-f6ce06732ec0" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DerekPicture.jpg"><img style="width:240px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/DerekPicture.jpg"/></a></figure><p id="10b9ad28-a8e1-80a9-a152-dcab2615d79b" class="">Derek</p></div><div id="10b9ad28-a8e1-8002-ba0b-cf7b4f951416" style="width:31.25%" class="column"><figure id="10b9ad28-a8e1-80cb-9b45-dfeb0614434b" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/nutmeg.jpg"><img style="width:192px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/nutmeg.jpg"/></a></figure><p id="10b9ad28-a8e1-808c-bda2-e2d2129bfe1a" class="">Nutmeg</p></div><div id="bdae7f4a-2d1e-47e8-85d7-728efe729ca8" style="width:21.875%" class="column"><figure id="d1e387fc-cd2f-457e-adb3-94c940501a94" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/nutmeg_daniel_gray.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/nutmeg_daniel_gray.jpg"/></a></figure><p id="10b9ad28-a8e1-80cb-ab81-d08adeb57691" class="">Derek + Nutmeg gray</p></div><div id="d2a5f5f8-34ed-42cd-9971-4ffac71ab8dc" style="width:21.875000000000004%" class="column"><figure id="4c3692df-f0d5-4798-a5b1-754832ff7b88" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/nutmeg_daniel_color.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/nutmeg_daniel_color.jpg"/></a></figure><p id="730adbbc-13f2-4236-aea9-c8305c407324" class="">Derek + Nutmeg color</p></div></div><p id="10b9ad28-a8e1-8079-9cf9-c492bc902018" class="">
+</p><p id="45f07cec-4f4b-44fe-a759-da3943d1a8f4" class="">
+</p><div id="10b9ad28-a8e1-80b9-af93-e3bed688c957" class="column-list"><div id="7e8cf8b1-a286-4cad-84c6-30b56ff99cb6" style="width:25%" class="column"><figure id="10b9ad28-a8e1-8093-8046-ffa097694d54" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/swimming.png"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/swimming.png"/></a></figure><p id="229c9a2d-ba70-45d9-bfa7-4d77fed58ab8" class=""><em>Swimming</em> - Mac Miller</p></div><div id="10b9ad28-a8e1-80a6-aad2-c6bb7fa3dc70" style="width:25%" class="column"><figure id="10b9ad28-a8e1-808c-bc03-e18c5836eb31" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/nurture.png"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/nurture.png"/></a></figure><p id="10b9ad28-a8e1-8085-b218-f848f190bc33" class=""><em>Nurture</em> - Porter Robinson</p></div><div id="10b9ad28-a8e1-804b-a273-c74223687001" style="width:25%" class="column"><figure id="10b9ad28-a8e1-80de-bdfe-ccd92d64f457" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/albums_hybrid_gray.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/albums_hybrid_gray.jpg"/></a></figure><p id="10b9ad28-a8e1-80a2-9e66-f1da994cc0d1" class=""><em>Swimming</em> + <em>Nurture</em> gray</p></div><div id="10b9ad28-a8e1-80a1-84b7-c49b75364106" style="width:25%" class="column"><figure id="10b9ad28-a8e1-809f-96d5-ffa2e6293ff4" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/albums_hybrid_color.jpg"><img style="width:142.5px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/albums_hybrid_color.jpg"/></a></figure><p id="10b9ad28-a8e1-80e8-aa81-f49682eb5754" class=""><em>Swimming</em> + <em>Nurture</em> color</p></div></div><p id="10b9ad28-a8e1-80c1-b8df-c27045886b46" class="">
+</p><p id="10b9ad28-a8e1-8006-b6dc-cea837b81df7" class=""><strong>Example with FFT frequencies displayed:</strong></p><div id="10b9ad28-a8e1-80c3-a598-d8947d2a50ed" class="column-list"><div id="10b9ad28-a8e1-8085-a664-ef80195cc55a" style="width:25%" class="column"><figure id="10b9ad28-a8e1-8089-b163-e688e5222dd0" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/jokic.png"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/jokic.png"/></a></figure><p id="a923bb5d-812b-4027-bd9e-5a7bae4683e5" class="">Nikola Jokić</p><p id="10b9ad28-a8e1-806c-ac78-d0484d9f6326" class="">
+</p></div><div id="10b9ad28-a8e1-80b2-956d-ccf90a6dfcad" style="width:25%" class="column"><figure id="10b9ad28-a8e1-8010-bf40-ce13b48baa2a" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/jokic_fft.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/jokic_fft.jpg"/></a></figure><p id="10b9ad28-a8e1-8092-9d5d-ea39fb991b6d" class=""><em>FFT</em>(Nikola Jokić)</p></div><div id="10b9ad28-a8e1-806e-bc48-e4a1dbe44698" style="width:25%" class="column"><figure id="10b9ad28-a8e1-809e-9ec6-e24cef14f7ac" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon.png"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon.png"/></a></figure><p id="10b9ad28-a8e1-8036-900a-e2ed5ba9a303" class="">Aaron Gordon</p></div><div id="10b9ad28-a8e1-80d3-b994-cc3ac26972c0" style="width:25%" class="column"><figure id="10b9ad28-a8e1-809c-8997-c2fd2d2418df" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_fft.jpg"><img style="width:142.5px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_fft.jpg"/></a></figure><p id="10b9ad28-a8e1-803f-b2d9-d7fa757bf199" class=""><em>FFT</em>(Aaron Gordon)</p></div></div><div id="10b9ad28-a8e1-8083-bf95-c32cd41991e8" class="column-list"><div id="10b9ad28-a8e1-802b-bb83-e7cbbf9c4b0d" style="width:25%" class="column"><figure id="254c64c7-af5a-4de1-8588-1493137cf860" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/jokic_frq.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/jokic_frq.jpg"/></a></figure><p id="10b9ad28-a8e1-8059-be5d-eca26899c9a5" class="">Jokić (low frequencies)</p><p id="10b9ad28-a8e1-80fe-a533-fad153ca40d3" class="">
+</p></div><div id="10b9ad28-a8e1-8057-b8b7-f12cf3151e84" style="width:25%" class="column"><figure id="10b9ad28-a8e1-8081-ad0f-fdf45f45f6da" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/jokic_frq_fft.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/jokic_frq_fft.jpg"/></a></figure><p id="10b9ad28-a8e1-80b0-b4c2-fc53fe828e23" class=""><em>FFT</em>[Jokić (low frequencies)]</p><p id="10b9ad28-a8e1-80cc-a337-d486ea24c6f8" class="">
+</p></div><div id="10b9ad28-a8e1-805b-b1be-de37b3913ac9" style="width:25%" class="column"><figure id="10b9ad28-a8e1-80d4-a019-cf8a92b9e2b1" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_frq.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_frq.jpg"/></a></figure><p id="10b9ad28-a8e1-807c-8a04-ced4dc7df4ce" class="">Gordon (high frequencies)</p><p id="10b9ad28-a8e1-802f-9d12-c78535fb8341" class="">
+</p></div><div id="10b9ad28-a8e1-80b4-81b1-c85df42b2f3a" style="width:25%" class="column"><figure id="500f40f3-fbaf-4652-9a7f-ce1711628ad7" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_frq_fft.jpg"><img style="width:142.5px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_frq_fft.jpg"/></a></figure><p id="10b9ad28-a8e1-80a1-a971-e98dc21250f9" class=""><em>FFT</em>[Gordon (high frequencies)]</p></div></div><p id="10b9ad28-a8e1-80d7-bda7-ea7a7eb2e5fe" class="">
+</p><div id="684a054d-7ada-4d38-a3ef-2ac08bbadaa1" class="column-list"><div id="10b9ad28-a8e1-8075-a2eb-c3201a7a3a4a" style="width:33.333333333333336%" class="column"><figure id="10b9ad28-a8e1-8000-9687-d5bfca793ea2" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_jokic_gray.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_jokic_gray.jpg"/></a></figure><p id="10b9ad28-a8e1-802d-9d49-f948eb00db34" class="">Hybrid Image Gray</p></div><div id="10b9ad28-a8e1-80e5-8791-f5e30fe2e17c" style="width:33.333333333333336%" class="column"><figure id="10b9ad28-a8e1-808c-95a6-ede21bc6629f" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_jokic_color.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/gordon_jokic_color.jpg"/></a></figure><p id="10b9ad28-a8e1-80b2-9e5e-d3401fcd939f" class="">Hybrid Image Color</p></div><div id="b14f160a-f9e1-43eb-a9da-6dde4c56a43b" style="width:33.33333333333333%" class="column"><figure id="10b9ad28-a8e1-808f-b48a-f64d0bb9bc48" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/hybrid_frq_fft.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/hybrid_frq_fft.jpg"/></a></figure><p id="10b9ad28-a8e1-807a-8118-d6d147b13caa" class=""><em>FFT</em>(Hybrid Image)</p></div></div><p id="b05d21a3-694b-430d-9708-fa016d87d45c" class="">
+</p><p id="10b9ad28-a8e1-8087-b78b-f67c85973e76" class=""><strong>Failure</strong></p><div id="10b9ad28-a8e1-805a-8051-c5d6835c2cc9" class="column-list"><div id="10b9ad28-a8e1-80cb-bdff-f231b5729935" style="width:42.10526315789473%" class="column"><figure id="10b9ad28-a8e1-804e-8794-e1a1829fef10" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/failed_blend.jpg"><img style="width:206.875px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/failed_blend.jpg"/></a></figure></div><div id="b52fc770-2928-433c-9157-91be3d50fa4f" style="width:57.89473684210527%" class="column"><p id="10b9ad28-a8e1-8075-8da0-e66db048bbb0" class="">Note that I had to play around with the different values of <style>@import url('https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css')</style><span data-token-index="0" contenteditable="false" class="notion-text-equation-token" style="user-select:all;-webkit-user-select:all;-moz-user-select:all"><span></span><span><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi></mrow><annotation encoding="application/x-tex">\sigma</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">σ</span></span></span></span></span><span>﻿</span></span>. A lot of the time, such as the one to the left resulted in a blended image where one of the images wasn’t very visible. Here Aaron Gordon isn’t very visible. </p></div></div><h2 id="10b9ad28-a8e1-80c3-bc78-e76d5d717b4e" class=""><strong>Part 2.3: Gaussian and Laplacian Stacks</strong></h2><p id="10b9ad28-a8e1-80b9-a2a0-c3be308e914d" class="">To make a Gaussian stack, you incrementally blur the image with a Gaussian convolution without scaling down the dimensions of the image. Then to create a Laplacian stack you take the differences of the layers in the Gaussian stack, with the last image in the stack being the last image in the Gaussian stack. Note these images have been normalized.</p><figure id="10b9ad28-a8e1-8065-9825-feefe93119d7" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/apple_gaus_stack_norm.png"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/apple_gaus_stack_norm.png"/></a><figcaption>Apple Gaussian stack</figcaption></figure><figure id="75409d1c-4ddc-49c7-935c-b46e3488cb5b" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/apple_lap_stack_norm.png"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/apple_lap_stack_norm.png"/></a><figcaption>Apple Laplacian stack</figcaption></figure><figure id="10b9ad28-a8e1-8055-a2eb-fd59b0382b3f" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/orange_gaus_stack_norm.png"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/orange_gaus_stack_norm.png"/></a><figcaption>Orange Gaussian stack</figcaption></figure><figure id="10b9ad28-a8e1-80d7-b602-c41b555e5fa6" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/orange_lap_stack_norm.png"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/orange_lap_stack_norm.png"/></a><figcaption>Orange Laplacian stack</figcaption></figure><p id="10b9ad28-a8e1-808d-b712-d954bad3f409" class="">
+</p><p id="10b9ad28-a8e1-805c-9d0b-fb52af6e982f" class="">And note that the Laplacian stacks, when collapsed result in the initial image.</p><h2 id="5d4b36b3-a4d3-4b3a-b015-b57d7ee54fb9" class=""><strong>Part 2.4: Multiresolution Blending</strong></h2><p id="10b9ad28-a8e1-80a6-bfea-c6d4fe64097c" class="">In order to blend the images, we need to create a mask to apply to each of the Laplacian stacks and add them together creating a new blended stack. Then we take this blended stack and collapse it leaving it with our final image.</p><div id="10b9ad28-a8e1-8020-951b-d2c82ed3ed67" class="column-list"><div id="10b9ad28-a8e1-80ab-bda0-fe9057e7ef7f" style="width:33.333333333333336%" class="column"><figure id="10b9ad28-a8e1-8065-8033-d9165d63fc48" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/apple.jpeg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/apple.jpeg"/></a></figure><p id="10b9ad28-a8e1-804e-a9f5-d2ff54e55086" class="">Apple</p></div><div id="10b9ad28-a8e1-80d6-a5fa-d55543127f0b" style="width:33.333333333333336%" class="column"><figure id="10b9ad28-a8e1-80dd-9e15-e69744833834" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/orange.jpeg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/orange.jpeg"/></a></figure><p id="10b9ad28-a8e1-80d8-a901-d0d9620e152b" class="">Orange</p></div><div id="10b9ad28-a8e1-807e-9b48-fb84aeacd3cd" style="width:33.33333333333333%" class="column"><figure id="10b9ad28-a8e1-80ae-8009-e40fc5e58254" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/oraple.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/oraple.jpg"/></a></figure><p id="54c17c3d-0fb7-4bc0-b4a3-1fd8ba31e3aa" class="">Aporange</p></div></div><p id="10b9ad28-a8e1-803f-b13c-f393f96e326d" class="">Blended Laplacian stack:</p><figure id="10b9ad28-a8e1-80b4-87f8-df2504375eaa" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blended_lap_stack.png"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/blended_lap_stack.png"/></a></figure><p id="10b9ad28-a8e1-8070-aa2a-fe61253c66ea" class="">
+</p><p id="5b0a79d7-4fa1-4af6-a73b-7cdb4913b62c" class="">These are some examples of my own</p><div id="10b9ad28-a8e1-80d4-b684-e9ec77619fe1" class="column-list"><div id="ceaef39c-9498-4bc5-8ce0-581c7f814c97" style="width:33.333333333333336%" class="column"><figure id="10b9ad28-a8e1-8015-87e1-e4cef4494538" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/rock_small.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/rock_small.jpg"/></a></figure><p id="10b9ad28-a8e1-8005-aa1e-edb9bbe8f9bf" class="">Dwayne Johnson</p></div><div id="01435aa7-8ae1-48a0-8164-38d16de38b74" style="width:33.33333333333333%" class="column"><figure id="7d0b8ef3-00b3-48ac-8e69-b4e81691298a" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/reed_small.jpg"><img style="width:205.328125px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/reed_small.jpg"/></a></figure><p id="722f0600-0d11-4a17-95d9-bbf2fda409d9" class="">Tanoai Reed (Dwyane’s Stunt Double)</p></div><div id="10b9ad28-a8e1-8037-b54b-e1bb01c8eeef" style="width:33.333333333333336%" class="column"><figure id="10b9ad28-a8e1-8053-b858-f0ed6158e5ea" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/rock_stunt_double_base3.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/rock_stunt_double_base3.jpg"/></a></figure><p id="10b9ad28-a8e1-801d-9d3b-cbfcbf1ef9be" class="">Dwayne Reed</p></div></div><p id="10b9ad28-a8e1-80e5-a52f-c984c64863a6" class="">
+</p><p id="10b9ad28-a8e1-80fe-812e-e7134c7e9eca" class="">This next examples uses a more complex mask</p><div id="10b9ad28-a8e1-802f-b688-dba72c94db6f" class="column-list"><div id="10b9ad28-a8e1-80fa-8a40-e5454db87208" style="width:25%" class="column"><figure id="10b9ad28-a8e1-8032-9764-cc4f339df22e" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/landscape2.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/landscape2.jpg"/></a></figure><p id="10b9ad28-a8e1-804a-9bbd-cf8ebf38da03" class="">Windows XP background</p></div><div id="10b9ad28-a8e1-803d-914d-fb882647b93c" style="width:25%" class="column"><figure id="10b9ad28-a8e1-8000-bf29-dabdb0a9eae8" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/dollar.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/dollar.jpg"/></a></figure><p id="10b9ad28-a8e1-804a-bbcf-fa8fb944f38f" class="">Back of dollar bill</p><p id="c81a8fbe-2219-4415-be2a-1dfdbe8d567a" class="">
+</p></div><div id="10b9ad28-a8e1-80ee-8078-d785a972d05b" style="width:25%" class="column"><figure id="10b9ad28-a8e1-805b-9298-d6f519670b4b" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/dollar_mask.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/dollar_mask.jpg"/></a></figure><p id="10b9ad28-a8e1-80f9-bdbf-e4be1cd56f62" class="">Mask for pyramid</p></div><div id="10b9ad28-a8e1-8069-a2ce-d20e7fcb669f" style="width:25%" class="column"><figure id="10b9ad28-a8e1-80f5-9a55-ccb8ce486ba8" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/pyramid_windows.jpg"><img style="width:708px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/pyramid_windows.jpg"/></a></figure><p id="10b9ad28-a8e1-804e-bb9c-de2097b8af88" class="">Blended</p></div></div><p id="10b9ad28-a8e1-802a-8e31-f572ed4aa9e3" class="">Note: I made the mask like this to include the plants at the bottom</p><p id="539c0d8e-3728-485e-8a1e-29c55e7ff8a0" class="">
+</p><div id="10b9ad28-a8e1-80a9-8947-fbf212f40119" class="column-list"><div id="10b9ad28-a8e1-8082-9145-c3bc39db62a6" style="width:25%" class="column"><figure id="10b9ad28-a8e1-805b-81be-fe254c4b0668" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/galaxy.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/galaxy.jpg"/></a></figure><p id="10b9ad28-a8e1-807b-a54d-f14c1e5535b2" class="">Real starry night</p></div><div id="c4411710-dc6f-413b-8465-eafe3e47e916" style="width:25%" class="column"><figure id="d010be03-7914-42f0-9f1a-95a381ba194a" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/starynight.jpg"><img style="width:600px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/starynight.jpg"/></a></figure><p id="10b9ad28-a8e1-8039-b7e2-da931c7d38b8" class=""><em>Starry Night - </em>Vincent van Gogh</p></div><div id="10b9ad28-a8e1-806c-9e18-ecfdc53e2e01" style="width:25%" class="column"><figure id="10b9ad28-a8e1-80cb-969a-e8d7ea153896" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/starry_mask.jpg"><img style="width:600px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/starry_mask.jpg"/></a></figure><p id="10b9ad28-a8e1-8078-b9bd-d5c5b1b9d9a9" class="">Mask for city</p><p id="09a0d006-eb9c-4fe6-ad14-88044d27230a" class="">
+</p></div><div id="10b9ad28-a8e1-8069-afc3-d069ab1c7284" style="width:25%" class="column"><figure id="10b9ad28-a8e1-8056-8560-eda5becde696" class="image"><a href="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/super_stary.jpg"><img style="width:331px" src="CS%20180%20-%20Project%202%20-%20Fun%20with%20Filters%20and%20Frequenc%20807f636193c546908ac2b9941de1ea5a/super_stary.jpg"/></a></figure><p id="10b9ad28-a8e1-800c-ad77-c37ffc87c7cd" class="">Blended</p></div></div><p id="10b9ad28-a8e1-8023-b0ce-cb24c866ef1b" class="">
+</p></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
